@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>测试界面</title>
+</head>
+
+<body>
+    <center>
+        <h1>操作Demo</h1>
+    </center>
+    <hr />
+    <center>
+        <h2>系统操作</h2>
+    </center>
+    <script>
+        var Strokes = '[10,125,220,125,0,255,125,10,125,230,0,255,255,255]';
+        function recognize() {
+            ChineseInput.HandWritingReconize(Strokes, function (code, data) {
+                console.log(data);
+            });
+        }
+
+        function OpenAcs() {
+            //参数是COM号,通常是5,但偶尔也会变...
+            AcsSwitch.OpenDev(5, function (x) {
+                alert(x == 0 ? "打开成功!" : "打开失败!");
+            });
+            AcsSwitch.SetCallback("AcsCallBack");
+        }
+        var ACS_PeapleSensor = null;
+        function AcsCallBack(acsstate) {
+            let acs = JSON.parse(acsstate).Bank_I;
+            let state = ((acs & 2) > 0)
+            if (ACS_PeapleSensor == state) return
+            ACS_PeapleSensor = state;
+            if (state) {
+                console.log("有人");
+            } else {
+                console.log("没人");
+            }
+        }//End func
+
+        ChineseInput.PinyinTrance2 = function (py) {
+            let result = [];
+            let cns = JSON.parse(ChineseInput.PinyinTrance(py));
+            for (let i = 0; i < cns.length; i++) {
+                let obj = {};
+                obj.Key = i;
+                obj.Value = cns[i];
+                result.push(obj);
+            }
+            return result;
+        }
+    </script>
+    <button onclick="location.reload()">刷新</button>
+    <button onclick="ThisWindow.Exit()">退出</button>
+    <button onclick="Dosomething()">测试异步调用</button>
+    <button onclick="alert(MachineInfo.GetMAC())">获取当前插着网线的网卡MAC地址</button>
+    <button onclick="LogHelper.WriteLog('这是一行日志!')">记录一行日志</button>
+    <button onclick="ThisWindow.Speak('这是一段语音')">语音合成</button>
+    <button onclick="ThisWindow.OpenDevTools()">打开开发者工具,不指定大小</button>
+    <button onclick="ThisWindow.OpenDevTools2(0,0,500,500)">打开开发者工具并指定大小</button>
+    <button onclick="ThisWindow.CloseDevTools()">关闭开发者工具</button>
+    <button onclick="console.log(ChineseInput.PinyinTrance('gao'))">拼音转换</button>
+    <button onclick="recognize()">笔画转换</button>
+    <button onclick="ThisWindow.ReSetRECT(0,0,800,600)">重置窗口大小</button>
+    <button onclick="DebugWin.Open()">打开调试工具</button>
+    <button onclick="ThisWindow.PlaySpecialSound('D:/ZZJ/SpecialSounds/1.wav')">播放特效声音</button>
+    <button onclick="ThisWindow.Reboot()">重启</button>
+    <button onclick="ThisWindow.PowerOff()">关机</button>
+    <button onclick="alert(ThisWindow.ReadDict('ID'))">读字典节点</button>
+    <button onclick="ThisWindow.WriteDict('ID','11231')">写字典节点</button>
+    <button onclick="ThisWindow.WriteDict('ID',null)">清除字典节点</button>
+    <button onclick="if(ThisWindow.IsInit())alert('第一次调用')">查看是不是第一次打开页面</button>
+    <script>
+        function Record_Start() {
+            VideoRecord.WriterConfig("D:/ZZJ/Record/Config.YAML", JSON.stringify({
+                Record: true,
+                OutputDirectory: "e:/video/2017年9月20日/流水号123/",
+            }));
+        }
+
+        function Record_Close() {
+            VideoRecord.WriterConfig("D:/ZZJ/Record/Config.YAML", JSON.stringify({
+                Record: false,
+                OutputDirectory: "",
+            }));
+        }
+    </script>
+    <button onclick='Record_Start()'>开始录像</button>
+    <button onclick="Record_Close()">结束录像</button>
+    <br />
+
+    <hr />
+
+    <center>
+        <h2>语音识别</h2>
+    </center>
+    <button onclick="alert(RecognizedVoice.SetCallback('VOICECALLBACK'))">设置回调</button>
+    <button onclick="alert(RecognizedVoice.SetWords(['内科','外科','办卡','挂号']))">设置识别词</button>
+    <script>
+
+        function VOICECALLBACK(info) {
+            let objinfo = JSON.parse(info);
+            console.log(objinfo);
+            alert(objinfo.Text);
+        }
+    </script>
+    <hr />
+
+    <center>
+        <h2>502证卡机操作</h2>
+    </center>
+    <button onclick="h502_opendev()">打开设备</button>
+    <button onclick="h502_readycard()">准备一张卡</button>
+
+    <button onclick="GetStatus();">检查状态</button>
+    <button onclick="ReadTracksCard(true);">第一次读磁卡</button>
+    <button onclick="ReadTracksCard(false);">后续读磁卡</button>
+    <button onclick="h502_outcard()">出卡</button>
+    <button onclick="FKQDev.H502_Close()">关闭设备</button>
+    <script>
+        function GetStatus() {
+            FKQDev.H502_GetStatus().then( (value) => {
+                console.log(value)
+            });
+        }
+
+        function ReadTracksCard(first) {
+            FKQDev.H502_ReadTracksCard(first).then( (value) => {
+                console.log(value)
+            });
+        }
+
+        function h502_opendev() {
+            //另一种方式FKQDev.H502_OpenCOM(10)
+            FKQDev.H502_Open('COM10').then(function (iret) {
+                if (iret == 0) {
+                    alert("打开成功!");
+                } else {
+                    alert("打开失败!");
+                }
+            });
+        }
+
+        function h502_outcard() {
+            //走卡到出卡位
+            //InternalIC:0x31 InternalRF:0x32 OutHold:0x30 OutUnhold:0x39 RecycleBox:0x33 Printer:0x35
+            FKQDev.H502_MoveCard(0x39);
+        }
+
+        function h502_writecard() {
+            //写卡 参数:扇区 块 密钥类型(0=A 1=B) 密钥 数据
+            FKQDev.H502_WriteRFCard(1, 1, 0, JSON.stringify([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]), JSON.stringify([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])).then(function (json) {
+                console.log(json)
+            });
+        }
+
+        function h502_readycard() {
+            //走卡到读卡位
+            //InternalIC:0x31 InternalRF:0x32 OutHold:0x30 OutUnhold:0x39 RecycleBox:0x33 Printer:0x35
+            FKQDev.H502_MoveCard(0x31).then(function (iret) {
+                if (iret != 0) {
+                    alert("走卡失败!");
+                    return;
+                }
+                //检测有没有卡
+                FKQDev.H502_CheckCard().then(function (iret2) {
+                    if (iret2 != 0) {
+                        alert("走卡成功但检测卡失败!");
+                        return;
+                    }
+
+                    //读卡 参数:扇区 块 密钥类型(0=A 1=B) 密钥
+                    FKQDev.H502_ReadRFCard(1, 1, 0, JSON.stringify([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])).then(function (json) {
+                        console.log(json)
+                    });
+                });
+            });
+        }
+    </script>
+    <hr />
+
+    <center>
+        <h2>T12证卡机操作</h2>
+    </center>
+    <button onclick="t12_opendev()">打开设备</button>
+    <button onclick="t12_readycard()">准备一张卡</button>
+    <button onclick="t12_outcard()">出卡</button>
+    <button onclick="t12_writecard()">写卡</button>
+    <button onclick="FKQDev.T12_Close()">关闭设备</button>
+    <script>
+        function t12_opendev() {
+            FKQDev.T12_M1_Open('HiTi CS-200e', 11).then(function (iret) {
+                if (iret == 0) {
+                    alert("打开成功!");
+                } else {
+                    alert("打开失败!");
+                    console.log(iret);
+                }
+            });
+        }
+
+        function t12_outcard() {
+            //走卡到出卡位
+            //InternalIC:0x31 InternalRF:0x32 OutHold:0x30 OutUnhold:0x39 RecycleBox:0x33
+            FKQDev.T12_MoveCard(0x39);
+            alert("出卡!");
+        }
+
+        function t12_readycard() {
+            //走卡到读卡位
+            //InternalIC:0x31 InternalRF:0x32 OutHold:0x30 OutUnhold:0x39 RecycleBox:0x33
+            FKQDev.T12_MoveCard(0x32).then(function (iret) {
+                if (iret != 0) {
+                    alert("走卡失败!");
+                    return;
+                }
+                //检测有没有卡
+                FKQDev.T12_CheckCard().then(function (iret2) {
+                    if (iret2 != 0) {
+                        alert("走卡成功但检测卡失败!");
+                        return;
+                    }
+
+                    //读卡 参数:扇区 块 密钥类型(0=A 1=B) 密钥
+                    FKQDev.T12_ReadRFCard(1, 1, 0, JSON.stringify([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])).then(function (json) {
+                        alert("走卡成功!");
+                        console.log(json);
+                    });
+                });
+            });
+        }
+
+        function t12_writecard() {
+            //写卡 参数:扇区 块 密钥类型(0=A 1=B) 密钥 数据
+            FKQDev.T12_WriteRFCard(1, 1, 0, JSON.stringify([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]), JSON.stringify([0xFF, 0x00, 0xFF, 0x12, 0xFF, 0x77, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])).then(function (json) {
+                console.log(json)
+                alert("写卡成功!");
+            });
+        }
+
+    </script>
+
+    <!-- T12这个证卡机,磁条卡和射频卡分别是两个版本 -->
+    <button onclick="t12_opendevtotracks()">打开设备(用磁条卡模式)</button>
+    <button onclick="t12_readytrackscard()">准备磁条卡卡</button>
+
+    <script>
+        function t12_opendevtotracks() {
+            //磁条卡模式没有串口号
+            FKQDev.T12_Tracks_Open('HiTi CS-200e').then(function (iret) {
+                if (iret == 0) {
+                    alert("打开成功!");
+                } else {
+                    alert("打开失败!");
+                    console.log(iret);
+                }
+            });
+        }
+
+        //读卡
+        function t12_readytrackscard() {
+            FKQDev.T12_ReadTracksCard(function (iret, bins, strs) {
+                console.log(iret);
+                console.log(bins);
+                console.log(strs);
+            });
+        }
+
+
+    </script>
+
+    <hr />
+
+    <center>
+        <h2>使用读卡器</h2>
+    </center>
+    <button onclick="OpenDKQ()">打开读卡器</button>
+    <button onclick="SetInCard(1)">允许进卡</button>
+    <button onclick="SetInCard(0)">禁止进卡</button>
+    <button onclick="CheckCard()">检测有没有卡</button>
+    <button onclick="MoveCard(0)">退卡</button>
+    <button onclick="MoveCard(2)">走卡到IC位</button>
+    <button onclick="MoveCard(3)">走卡到RF位</button>
+    <button onclick="BReadCardDev.SwingCard()">刷磁条卡</button>
+    <button onclick="RWRFCard()">读写射频卡</button>
+    <button onclick="ReadTracksBinary()">读磁条卡</button>
+    <button onclick="ReadCardDev.Close()">关闭读卡器</button>
+    <hr />
+    <center>
+        <h2>扫码机</h2>
+    </center>
+    <script>
+        function QR_Callback(data) {
+            console.log(data);
+        }
+    </script>
+    <!-- 参数:类型,端口号,回调 返回0表示打开成功 -->
+    <button onclick="QRScan.OpenScan('XN200', 7,'QR_Callback')">打开扫描</button>
+    <button onclick="QRScan.Close()">关闭扫描</button>
+    <hr />
+    <center>
+        <h2>播放器</h2>
+    </center>
+    <button onclick="VideoPlayer.NewPlayWindow('Player1','C:/Users/asml/Documents/Tencent Files/172259743/FileRecv/Camera2.MP4',500,500,400,300)">打开视频</button>
+    <button onclick="VideoPlayer.Close('Player1')">关闭视频</button>
+    <button onclick="VideoPlayer.Pause('Player1')">暂停视频</button>
+    <button onclick="VideoPlayer.Play('Player1')">播放视频</button>
+    <button onclick="console.log(VideoPlayer.GetDuration('Player1'))">查询长度</button>
+    <button onclick="console.log(VideoPlayer.GetPosition('Player1'))">查询进度</button>
+    <button onclick="VideoPlayer.SetPosition('Player1',1)">设置进度</button>
+    <button onclick="console.log(VideoPlayer.GetVolume('Player1'))">查询音量</button>
+    <button onclick="VideoiPlayer.SetVolume('Player1',0)">设置音量</button>
+    <hr />
+    <center>
+        <h2>文件系统</h2>
+    </center>
+    <button onclick="console.log(FileSystem.GetDirectories('E:/'))">查询一个路径下的文件夹</button>
+    <button onclick="console.log(FileSystem.GetFiles('E:/'))">查询一个路径下的文件</button>
+    <button onclick="console.log(FileSystem.DownFile('http://www.XX.COM/1.jpg','E:/1.jpg'))">下载文件</button>
+
+    <button onclick="FileSystem.WriterText('E:/1.txt','hi')">写Text到文件</button>
+    <button onclick="console.log(FileSystem.ReadAllText('E:/1.txt'));">读Text</button>
+    
+    <button onclick="FileSystem.CopyFile('E:/1.txt', 'E:/2.txt');">复制文件</button>
+    <button onclick="FileSystem.DeleteFile('E:/1.txt');">删除文件</button>
+    <button onclick="console.log(FileSystem.ExistsFile('E:/1.txt'))">判断文件是否存在</button>
+    <button onclick="FileSystem.CreateDirectory('E:/177/123/124')">创建文件夹</button>
+    <button onclick="console.log(FileSystem.ExistsDir('E:/177/123/124'))">判断文件夹是否存在</button>
+    <button onclick="FileSystem.DeleteDir('E:/177/123/124')">删除文件夹</button>
+    <button onclick="console.log(FileSystem.ReadFileToBase64('test.PNG'))">读取文件为base64</button>
+    <button onclick="FileSystem.WriteImageFileFromBase64('E:/177.png','base64')">把base64保存成图片</button>
+    <hr />
+    <center>
+        <h2>门禁操作</h2>
+    </center>
+    <button onclick="OpenAcs()">打开机身电路控制板</button>
+    <!--参数:组号 通道号 操作
+        组号和通道号,每个医院不同,请参考自助机配置表
+        (0关1闪烁3打开)
+    -->
+    <button onclick="AcsSwitch.SetAcs('C',1,3)">打开推杆</button>
+    <button onclick="AcsSwitch.SetAcs('C',1,0)">关闭推杆</button>
+    <button onclick="AcsSwitch.SetAcs('B',1,3)">打开某个灯</button>
+    <button onclick="AcsSwitch.SetAcs('B',1,0)">关闭某个灯</button>
+    <button onclick="AcsSwitch.CloseALL()">关闭所有灯</button>
+    <button onclick="AcsSwitch.CloseDev()">关闭门禁连接</button>
+    <hr />
+    <center>
+        <h2>调用插件方式2</h2>
+    </center>
+    <button onclick="alert(class1.Addtion(15,22))">调用插件里的方法</button>
+    <hr />
+    <center>
+        <h2>打印机操作</h2>
+    </center>
+    <button onclick="PrintPT()">打印个凭条</button>
+    <button onclick="PrintCard()">打印个卡</button>
+    <hr />
+    <center>
+        <h2>硬币器</h2>
+    </center>
+    <!-- 参数:串口号,波特率,1元硬币,5角硬币,1角硬币,入币回调函数名 -->
+    <button onclick="console.log(CoinInDev.OpenCoinDev_In('COM2',9600,true,true,false,'InCoin'))">打开入币</button>
+    <!--返回一个数组,有2个元素,1元和5角, 0x1001表示硬币即将用完  -->
+    <button onclick="console.log(CoinInDev.GetDevState());">获取硬币器状态</button>
+    <button onclick="CoinInDev.Close()">关闭设备</button>
+    <!-- 出币之前要关闭设备 -->
+    <!-- 参数:串口号 波特率 硬币数量 回调方法 -->
+    <button onclick="CoinOutDev.Coin1Out('COM2',9600,2,OutCoin)">出币2元</button>
+    <!-- 参数:串口号 波特率 硬币数量 回调方法 -->
+    <button onclick="CoinOutDev.Coin05Out('COM2',9600,1,OutCoin)">出币5角</button>
+
+    <script>
+        function InCoin(rmb, state) {
+            console.log("rmb:" + rmb + " state:" + state);
+        }
+        //返回值:
+        //iret:0完成找零 - 1:找零器异常 - 2:找零器无法打开  其它:各种异常
+        //state:硬币器返回的状态,通常是找零硬币数量.如果失败,会返回负数
+        //msg:文本消息
+        function OutCoin(iret, state, msg) {
+            console.log("iret:" + iret + " state:" + state + "msg:" + msg);
+        }
+    </script>
+    <hr />
+
+
+    <center>
+        <h2>纸币器操作</h2>
+    </center>
+
+    状态:<span id="label_zbq_status">无</span>|金额:<span id="label_zbq_money">0</span>
+
+    <div id="label_zbq_status"></div>
+
+    <!--建议一开机就连接纸币器,然后要用的时候再设置进钞,不用的时候禁止进钞,不用关纸币器连接.-->
+    <button onclick="OpenZBQ()">打开纸币器</button>
+    <button onclick="ZBQDev.CloseZBQ()">关闭纸币器</button>|
+    <button onclick="ZBQDev.SetInMoney(InRMB)">设置进钞</button>
+    <button onclick="ZBQDev.CloseInMoney()">禁止进钞</button>
+    <button onclick="console.log(ZBQDev.TakeMsg())">主动获取一个消息</button>|
+
+    <script>
+        var InRMB = '{"RMB1":1,"RMB2":1,"RMB5":1,"RMB10":1,"RMB20":1,"RMB50":1,"RMB100":1}';
+        var label_status = document.getElementById("label_zbq_status");
+        //接收纸币器消息
+        //status  0:待机状态,此时可退出可关闭  1:收钱中,此时不能让用户点功能按钮 2:收钱结束 刷新界面上的金额 -1:设备损坏
+        //money		用户塞入的钱数
+        //msg			文本消息
+        var MoneyTotal = 0;
+        function ZBQEvent(status, money, msg) {
+            if (status == 0) label_status.innerHTML = "请放入纸币!";
+            if (status == 1) label_status.innerHTML = "收钱中...";
+            if (status == 2) {
+                label_status.innerHTML = "收到了纸币,面值:" + money;
+                MoneyTotal += money;
+                document.getElementById("label_zbq_money").innerHTML = MoneyTotal;
+            }
+        }
+
+        function OpenZBQ() {
+            Money = 0;
+            MoneyTotal = 0;
+            document.getElementById("label_zbq_money").innerHTML = "0";
+            var OpenResult = ZBQDev.OpenZBQ("MEI", 4, "ZBQEvent");
+            if (OpenResult != 0) {
+                label_status.innerHTML = "打开失败!!";
+                alert("打开失败!");
+                return;
+            }
+            label_status.innerHTML = "打开成功!";
+            alert("打开成功!");
+        }
+    </script>
+    <hr />
+    <script>
+        function SFZEvent(iret, infojson) {
+            console.log(infojson);
+        }
+    </script>
+    <center>
+        <h2>身份证阅读器操作</h2>
+    </center>
+    <!--中间那个路径是相片保存路径,建议每次操作不要用同一个文件-->
+    <button onclick="IDCardDev.Open('HX','D:/1.BMP','SFZEvent')">打开身份证阅读器</button>
+    <button onclick="IDCardDev.Close()">关闭身份证阅读器</button>|
+    <hr />
+    <script>
+        //你可能不需要走卡
+        function FKQDevMoveCard() {
+            FKQDev.MoveCard(3, function (iret) {
+                Console.log(iret);
+            });
+        }
+    </script>
+    <center>
+        <h2>录像操作</h2>
+    </center>
+    <script>
+        function Record_Start() {
+            VideoRecord.WriterConfig("", JSON.stringify({
+                Record: true,
+                OutputDirectory: "e:/video/2017年9月20日/流水号123/",
+            }));
+        }
+        function Record_Close() {
+            VideoRecord.WriterConfig("", JSON.stringify({
+                Record: false,
+                OutputDirectory: "",
+            }));
+        }
+
+        function Record_UDP(msg) {
+            console.log(msg);
+        }
+
+        function QueryCameraList() {
+            SocketUDP.SendMsg(25877, '{"Class":"PassportRecognize","Code":"TakeInfo","ResultPort":"10021"}');
+        }
+        function InitCamera() {
+            SocketUDP.SendMsg(25877, '{"Class":"PassportRecognize","Code":"Init","CameraID":"2","ResultPort":"10021"}');
+        }
+        function UnInitCamera() {
+            SocketUDP.SendMsg(25877, '{"Class":"PassportRecognize","Code":"UnInit","ResultPort":"10021"}');
+        }
+        function Recognize() {
+            SocketUDP.SendMsg(25877, '{"Class":"PassportRecognize","Code":"Recognize","ResultPort":"10021"}');
+        }
+
+
+    </script>
+    <button onclick='Record_Start()'>开始录像</button>
+    <button onclick="Record_Close()">结束录像</button>
+    <button onclick='SocketUDP.OpenPort(10021,"Record_UDP")'>打开UDP端口</button>
+    <button onclick='SocketUDP.ClosePort(10021)'>关闭UDP端口</button>
+    <button onclick='SocketUDP.SendMsg(10000, "123456")'>测试UDP发送</button>
+    <button onclick='QueryCameraList();'>查询摄像头列表</button>
+    <button onclick='InitCamera();'>初始化摄像头</button>
+    <button onclick='UnInitCamera();'>反初始化摄像头</button>
+    <button onclick='Recognize();'>识别护照</button>
+    <hr />
+    <center>
+        <h2>时间操作</h2>
+    </center>
+    <button onclick="console.log(DateTimeManager.GetNowDateTime('yyyy-MM-dd'))">读取时间</button>
+    <button onclick="DateTimeManager.SetDateTime('2010-10-22 12:22:00','yyyy-MM-dd HH:mm:ss')">设置时间</button>
+    <button onclick="console.log(DateTimeManager.ConvertDateTime('2017-12-10','yyyy-MM-dd','yyyy年MM月dd日'))">时间格式转换</button>
+    <hr />
+
+    <center>
+        <h2>插件操作</h2>
+    </center>
+    <script>
+        var PluginID = 0;
+        function LoadPlugin() {
+            //这里是加载插件,会把插件文件加载到内存,参数是插件Class名,返回值是插件的程序集ID
+            AsmID = InvokePlugin.LoadPlugin("ThisATest", "PluginCallBack");
+            if (PluginID >= 0) {
+                console.log("加载插件成功!程序集ID:" + AsmID);
+            }
+            else {
+                console.log("加载插件失败!");
+            }
+        }
+
+        //给插件的回调方法
+        function PluginCallBack(Param) {
+            console.log(Param);
+            return '{"Code":"0"}';
+        }
+
+        function CallPlugin() {
+            //这里调用插件,参数:程序集ID,插件名,方法名,给插件方法的参数
+            var Result = InvokePlugin.CallPlugin(AsmID, "ThisATest", "Addtion", '{"Number1":123.5,"Number2":6.5}');
+            console.log(Result);
+        }
+
+        function CallPlugin2() {
+            //这里设置一个定时器,让插件每隔1秒回调一下
+            var Result = InvokePlugin.CallPlugin(AsmID, "ThisATest", "SetRing", '{"Time":1000}');
+            console.log(Result);
+        }
+
+        function CallPlugin3() {
+            //取消定时器
+            var Result = InvokePlugin.CallPlugin(AsmID, "ThisATest", "StopRing", '');
+            console.log(Result);
+        }
+    </script>
+    <button onclick="LoadPlugin()">加载插件</button>
+    <button onclick="CallPlugin()">调用插件</button>
+    <button onclick="CallPlugin2()">测试回调</button>
+    <button onclick="CallPlugin3()">结束测试回调</button>
+    <hr />
+
+    <script>
+        function ZKJReadTracks() {
+            FKQDev.ReadTracksBinary(function (code, data0, data1, data2) {
+                console.log(code);
+                console.log(data0);
+                console.log(data1);
+                console.log(data2);
+            });
+        }
+        function PrintCard2() {
+            console.log("调用打印...");
+            //打印机名称 宽度 高度 调试 准备打印回调
+            ZZJPrinter.Print("HiTi CS-200e", 100, 200, false, function (Code, ID) {
+                console.log("打印回调:" + Code + ID);
+                if (Code == 0) {
+                    //打印文本:ID 字体 大小 颜色 X Y 内容
+                    ZZJPrinter.PrintString(ID, "黑体", 22, 0, 0, 0, "这是一张测试卡!");
+                    //打印加粗文本:ID 字体 大小 颜色 X Y 内容
+                    ZZJPrinter.PrintString(ID, "黑体", 22, 0, 0, 0, "这是一张测试卡!");
+                    console.log("绘制完毕!");
+                    //绘制完毕,开始打印
+                    ZZJPrinter.StartPrint(ID);
+                    console.log("开始打印!");
+                }
+                console.log("回调返回!");
+            });
+            console.log("调用结束");
+        }
+
+        let printobj = {
+            /* 字体数组,参数:字体名,大小,是否加粗 */
+            Fonts: [
+                { Name: "黑体", Size: 22, Bold: true }, { Name: "黑体", Size: 32, Bold: true }
+            ],
+            Texts: [/* 内容,打印位置X,打印位置Y,字体ID(就是字体在上面这个数组的序号,颜色RGB(可以不传,默认为黑)) */
+                { Content: "1234567890", X: 50, Y: 50, FontID: 0, RGB: [0, 0, 0] }
+            ]
+        };
+        function PrintCard() {
+            console.log("调用打印...");
+            //打印机名称 宽度 高度 调试 准备打印回调
+            ZZJPrinter.Print2("HiTi CS-200e", 300, 300, false, JSON.stringify(printobj));
+            console.log("调用结束");
+        }
+
+
+        function PrintPT() {
+            ZZJPrinter.Print2("CUSTOM K80", 300, 300, false, JSON.stringify(printobj));
+
+            //打印机名称 宽度 高度 调试 准备打印回调
+            ZZJPrinter.Print("CUSTOM K80", 300, 300, false, function (Code, ID) {
+                if (Code == 0) {
+                    //打印文本:ID 字体 大小 颜色 X Y 内容
+                    ZZJPrinter.PrintString(ID, "黑体", 22, 0, 0, 0, "这是一张测试凭条!");
+                    //打印加粗文本:ID 字体 大小 颜色 X Y 内容
+                    ZZJPrinter.PrintString(ID, "黑体", 22, 0, 0, 0, "这是一张测试凭条!");
+                    //打印base64图片:ID base64图像文件 X Y W H
+                    //ZZJPrinter.PrintBase64Picture(ID, "base64", 0, 0, 100, 100);
+                    //打印base64图片2:ID 图像文件 X Y W H
+                    //ZZJPrinter.PrintBase64Picture(ID, "D:/1.jpg", 0, 0, 100, 100);
+                    //绘制完毕,开始打印
+                    ZZJPrinter.StartPrint(ID);
+                }
+            });
+        }
+
+        function ReadTracksBinary() {
+            ReadCardDev.ReadTracksBinary2(function (x, s1, s2, s3) {
+                alert("成功!");
+            }, function (x, y) {
+                alert("失败!");
+            });
+        }
+        function Dosomething() {
+            test.doSomething(function () {
+                alert("OK");
+            }, function (a, b, c) {
+                alert(b);
+            });
+        }
+        function OpenDKQ() {
+            ReadCardDev.Open("ACTA6", 1, function (x) {
+                alert("打开读卡器成功!");
+            }, function (x, y, z) {
+                console.error(x + " " + y + " " + z);
+                alert("打开读卡器失败!");
+            });
+        }
+        function RWRFCard() {
+            ReadCardDev.ReadS50Card(1, 1, JSON.stringify([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])).then(function (ReadCardResult) {
+                console.log(ReadCardResult);
+                let rdc = JSON.parse(ReadCardResult);
+                rdc.Data[3]++;
+                ReadCardDev.WriterS50Card(1, 1, JSON.stringify([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]), JSON.stringify(rdc.Data));
+                console.log(rdc);
+            }
+            );
+        }
+
+        function MoveCard(position) {
+            //走卡位置ID: 0:前端不持卡 1:前端持卡 2:IC位 3:RF位 4:后端持卡 5:后端不持卡
+            ReadCardDev.MoveCard(position);
+        }
+
+        function CheckCard() {
+            ReadCardDev.CheckCard(function (iRet) {
+                if (iRet == -1) {
+                    alert("错误");
+                }
+                if (iRet == 0) {
+                    alert("无卡");
+                }
+                if (iRet == 1) {
+                    alert("有卡");
+                }
+            });
+        }
+
+        function SetInCard(seti) {
+            ReadCardDev.SetInCard(seti);
+        }
+    </script>
+
+
+    <hr />
+    <center>
+        <h2>发放柜操作</h2>
+    </center>
+    <!--串口号1 串口号2-->
+    <button onclick="console.log(Coatsbox.OpenDev(1,2))">打开设备</button>
+    <button onclick="Coatsbox.OpenGate(1,1)">开门</button>
+    <button onclick="Coatsbox.CloseGate(1,1)">关门</button>
+    <button onclick="Coatsbox.CloseDev()">关闭设备</button>
+    <hr />
+
+</body>
+
+</html>

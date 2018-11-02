@@ -1,0 +1,113 @@
+@charset 'UTF-8';
+
+/* 
+ * 2018-04-28
+ * 主题样式
+ * Evan
+ */
+.gradual-theme,
+.btn-gradual-theme,
+.gradual-theme-list .btn,
+.list-group-wrap .list-group .row-item.active .fa-check,
+.multiple-options .evaluate-list .evaluate.active i.fa-check {
+    color: #fffefe;
+    background-color: #CA2E6F;
+}
+
+.prompt-msg,
+.theme-color,
+#screen-prompt,
+.theme-title-color,
+.wrapper .animated + .time,
+.theme-input-group .input-control,
+.choose-time-quantum .input-control,
+.calendar .calendar-panple li.active,
+.multiple-options .evaluate-list .evaluate.active {
+    /*color: #CA2E6F;*/
+    color:#ed3884;
+}
+
+.theme-br-color,
+.theme-input-group .input-control,
+.list-group-wrap .list-group .row-item .fa-check,
+.multiple-options .evaluate-list .evaluate i.fa-check {
+    border-color: #CA2E6F !important;
+}
+
+.footer,
+.theme-bg-color,
+.theme-color.btn-link:after {
+    background-color: #93034a !important;
+}
+.theme-bg-footer{
+    background-color: #a25641 !important;;
+}
+.text-shadow {
+    text-shadow: 0 0 10px rgba(199, 203, 239, .8);
+}
+
+.theme-input-group input::-webkit-input-placeholder {
+    color: #b7b7b7;
+    font-weight: normal;
+}
+
+.page-info .btn.yes,
+.transparency-bg-color,
+.theme-input-group .input-control,
+.list-group-wrap .list-group .row-item.active,
+.write-discern .output-character .btn-page.yes,
+.composite-keyboard .output-character .btn-page.yes {
+    background-color: rgba(237, 56, 132, 0.1);
+}
+
+.theme-tinge-color {
+    color: #ed3884;
+}
+
+.theme-tinge-br-color {
+    border-color: #ed3884 !important;
+}
+
+.theme-tinge-br-color-1 {
+    border-color: rgba(233, 119, 124, 0.22) !important;
+}
+
+.layer-pop .msg,
+.theme-hint-color,
+.hospitaled-inventory .list-group,
+.take-number-list-page .list-group,
+.print-laboratory-sheet .list-group,
+.hospitaled-consume-details .list-group {
+    color: #206fbf !important;
+    /*color: #a25641 !important;*/
+}
+
+/* 放钞金额动画 */
+.cash-top-up .handle-info-wrap .real-sum span {
+	animation: bigAndSmall 2s linear infinite;
+}
+
+/* 日历 */
+.calendar .calendar-panple li.active {
+    font-weight: bold;
+}
+
+/* 登录 */
+.pop-login .top {
+    border-bottom-color: #CA2E6F !important;
+}
+
+.pop-login .title {
+    border-bottom-color: #93034a !important;
+}
+
+/* 键盘 */
+.keyboard-wrap.position {
+    background-color: rgba(0, 0, 0, .6);
+}
+
+/* 满意度调查 */
+.multiple-options .option-group p {
+    background-color: rgba(237, 56, 132, 0.1);
+}
+/* ----------- */

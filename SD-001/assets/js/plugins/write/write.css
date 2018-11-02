@@ -1,0 +1,110 @@
+/* 
+ * 2018-04-18 00:12:22
+ * 手写插件
+ * Evan
+ */
+.write-discern {
+    color: #666666;
+    width: 930px;
+    font-size: 36px;
+    margin: 15px auto;
+    overflow: hidden;
+    text-align: center;
+    background-color: rgba(255, 0, 255, .03);
+    border-radius: 5px;
+   /* width: 720px;
+    font-size: 30px;*/
+}
+
+.write-discern .output-character {
+    color: #999;
+    width: 913px;
+    height: 105px;
+    line-height: 105px;
+    margin: auto;
+    /*padding-top: 5px;*/
+    /*width: 720px;
+    height: 60px;
+    line-height: 60px;*/
+}
+
+.write-discern .output-character .btn-page {
+    width: 105px;
+    height: 105px;
+    text-indent: -5000px;
+    border-radius: 5px;
+    pointer-events: none;
+    width: 60px;
+    height: 60px;
+}
+
+.write-discern .output-character .btn-page.character-prev-page {
+    background: url(imgs/prev-page-dis.png);
+    background-size: cover;
+}
+
+.write-discern .output-character .btn-page.character-next-page {
+    background: url(imgs/next-page-dis.png);
+    background-size: cover;
+}
+
+.write-discern .output-character .btn-page.character-prev-page.yes {
+    background-image: url(imgs/prev-page.png);
+    background-size: cover;
+}
+
+.write-discern .output-character .btn-page.character-next-page.yes {
+    background-image: url(imgs/next-page.png);
+    background-size: cover;
+}
+
+.write-discern .output-character .btn-page.yes {
+    pointer-events: auto;
+    /* background-color: rgba(19, 181, 177, .3); */
+}
+
+.write-discern .character-list li,
+.write-discern .write-blank {
+    width: 80px;
+    height: 100px;
+    line-height: 100px;
+    margin: 0 2px;
+    text-align: center;
+    background-color: #F3E9E6;
+    background-image: linear-gradient(0deg, #ead2d2 0%, #f2ecea 100%);
+    /*width: 54px;
+    height: 60px;
+    line-height: 60px;
+    margin: 0 3px;*/
+}
+
+.write-discern .write-wrap {
+    width: 357px;
+    height: 357px;
+    background-image: url(imgs/writer-bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-left: 20px;
+    width: 300px;
+    height: 300px;
+}
+
+.write-discern .btn-wrap .btn {
+    width: 260px;
+    margin-top: 25px;
+    margin-right: 50px;
+    line-height: 95px;
+    box-shadow: 0px 2px 3px 0px rgba(185, 170, 170, 0.78);
+    border-radius: 8px;
+    background-image: linear-gradient(0deg, #ead2d2 0%, #f2ecea 100%);
+    /*margin-top: 16px;
+    line-height: 75px;*/
+}
+
+.write-discern .write-blank {
+    width: 913px;
+    margin: 17px auto;
+    border-radius: 5px;box-shadow: 0px 3px 1px 0px rgba(0, 0, 0, 0.35);
+    /*width: 720px;
+    margin: 0px auto;*/
+}

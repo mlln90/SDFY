@@ -1,0 +1,60 @@
+/* 
+ * 2018-04-12 17:24:18;
+ * 日历插件
+ * Evan
+ */
+.calendar {
+    color: #666;
+	width: 100%;
+	height: 350px;
+	border: 1px solid #5FE0DB;
+	overflow: hidden;
+	position: relative;
+	text-align: center;
+}
+
+.calendar .calendar-control {
+    z-index: 9;
+    /*background: linear-gradient(to bottom, rgba(250, 118, 143, 0.5) 0%, rgba(250, 118, 143, 0) 50%, rgba(250, 118, 143, 0.5) 100%);*/
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5) 0%, rgba(250, 266, 266, 0) 50%, rgba(255, 255, 255, 0.5) 100%);
+
+}
+
+.calendar .calendar-shade,
+.calendar .calendar-control {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+.calendar .calendar-shade .calendar-shade-line {
+	margin-top: 70px;
+	height: 70px;
+	border-top: 1px solid #999;
+	border-bottom: 1px solid #999;
+}
+
+.calendar .calendar-panple {
+	position: relative;
+}
+
+.calendar .calendar-panple ul {
+	top: 0;
+	left: 0;
+	width: 100%;
+	position: absolute;
+}
+
+.calendar .calendar-panple li {
+	height: 70px;
+	font-size: 28px;
+	line-height: 70px;
+}
+
+.calendar .calendar-panple li.active {
+	/*color: #f9758e;*/
+	color: #13b5b1;
+	font-size: 42px;
+}

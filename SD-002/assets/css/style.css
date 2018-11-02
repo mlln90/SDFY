@@ -1,0 +1,889 @@
+/* 2017-05-04 10:59:55 */
+
+@charset 'utf-8';
+
+
+html, body {
+    position: relative;
+    font-size: 18px;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+}
+
+.black-bg {
+    background: #A25641;
+	/*background: url(../../../ZZJ-002/assets/images/center-bg.png);*/
+	background: url(../images/login-bg-3.jpg);
+	background-size: cover;
+}
+
+.container {
+    margin: 0 auto;
+    width: 1280px;
+    height: 1024px;
+	overflow: hidden;
+    background: #3A3633;
+	background: url(../images/login-bg-3.jpg);
+	background-size: cover;
+}
+
+.wrapper {
+	padding: 15px;
+	height: 100%;
+	width: 100%;
+	box-shadow: inset 0 0 25px rgba(255, 255, 255, .2);
+}
+
+
+/* side-nav */
+#side-nav {
+	float: left;
+	width: 180px;
+	height: 100%;
+	border-right: 1px solid #525151;
+}
+
+#side-nav .wrap {
+	width: 100%;
+	height: 100%;
+	border-right: 1px solid #1A1817
+}
+
+#side-nav ul > li {
+	width: 80%;
+	font-size: 24px;
+	display: inline-block;
+	padding: 15px 0;
+	background: #1AB394;
+	border: 4px solid #ddd;
+	border-radius: 15px;
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, .5);
+	cursor: pointer;
+	margin-top: 20px;
+	transition: all .3s;
+} 
+
+#side-nav ul > li.active {
+	background: #0DB95D;
+	transition: all .3s;
+	color: #0A9048;
+	text-shadow: 1px 1px 1px rgba(255, 255, 255, .5);
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, .5), 0 3px 5px rgba(255, 255, 255, .5);
+}
+
+#choiseInvoce > li.active {
+	background: #0DB95D;
+	transition: all .3s;
+	color: #0A9048;
+	text-shadow: 1px 1px 1px rgba(255, 255, 255, .5);
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, .5), 0 3px 5px rgba(255, 255, 255, .5);
+}
+
+
+/* section */
+#section {
+	float: left;
+	width: 1100px;
+	height: 100%;
+}
+
+#section .wrap {
+	border-bottom: 1px solid #525151;	
+}
+
+#section .top {
+	color: #A25641;
+	height: 124px;
+	border-bottom: 1px solid #1A1817
+}
+
+#section .top .model {
+	padding: 5px 15px;
+}
+
+#section .top .model .num {
+	color: #B22424;
+}
+
+#section .top .hos-name {
+	font-size: 28px;
+	color: #B22424;
+	color: #A25641;
+}
+
+#section .operate-name {
+	font-size: 36px;
+	font-weight: bold;
+	padding: 5px;
+}
+
+#page-content {
+	height: 900px;
+	width: 100%;
+	overflow: hidden;
+}
+
+
+/* 子页公共样式 */
+.operate-btns > .item {
+	width: 50%;
+	float: left;
+	margin-top: 120px;
+	text-align: center;
+}
+
+.operate-btns > .item .btn {
+	width: 240px;
+	cursor: pointer;
+}
+
+.operate-btns > .item .item-icon {
+	font-size: 80px;
+	font-weight: bold;
+	width: 100%;
+	padding: 20px;
+	background: #9966FF;
+	border-radius: 5px;
+	box-shadow: 2px 2px 4px rgba(255, 255, 255, .6), 2px 2px 10px rgba(255, 255, 255, .4);
+}
+
+.operate-btns > .item p {
+	color: #A25641;
+	font-size: 36px;
+	line-height: 60px;
+}
+
+/* 确认提示框 */
+.ldyy-pop {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, .2);
+	top: 0;
+	left: 0;
+	z-index: 98;
+	text-align: center;
+}
+
+.ldyy-pop .content {
+	display: inline-block;
+}
+
+.ldyy-pop .animated {
+	width: 580px;
+	background: rgba(255, 255, 255, .8);
+	border-radius: 10px;
+	overflow: hidden;
+	margin-top: 240px;
+}
+
+.ldyy-pop .top {
+	padding: 10px;
+	position: relative;
+}
+
+.ldyy-pop .top .title {
+	font-size: 36px;
+	color: #330066;
+}
+
+.ldyy-pop .top > .time{
+	position: absolute;
+	color: #B22424;
+	top: 0;
+	right: 10px;
+	font-size: 34px;
+	line-height: 42px;
+}
+
+.ldyy-pop .msg {
+	padding: 25px 15px;
+	font-size: 28px;
+	color: #CC0066;
+	border-top: 1px solid rgba(51, 0, 255, .8);
+}
+
+.ldyy-pop .btns > .btn {
+	float: left;
+	width: 50%;
+	padding: 15px;
+	cursor: pointer;
+	font-size: 24px;
+	border-top: 1px solid rgba(255, 255, 255, .5);
+}
+
+.ldyy-pop .btns > .btn-affirm {
+	width: 100%;
+}
+
+.ldyy-pop .btns > .btn:nth-child(2) {
+	width: 50%;
+	border-left: 1px solid rgba(255, 255, 255, .5);
+}
+
+.ldyy-pop .btns > .btn.btn-cancel {
+	background: rgba(255, 0, 255, .5);
+}
+
+.ldyy-pop .btns > .btn.btn-affirm {
+	background: rgba(0, 204, 255, .5);
+}
+
+
+
+/* 日期插件 */
+#datepicker {
+	display: inline-block;
+}
+
+#datepicker input,
+#system-log .row-item .value,
+#video-playback .row-item .value {
+	background: none;
+	border: 1px solid #ddd;
+	height: 60px;
+	line-height: 60px;
+	width: 200px;
+	color: #99FF00;
+	font-size: 25px;
+}
+
+.input-daterange .input-group-addon {
+	text-shadow: none;
+	background: none;
+	padding: 10px;
+	font-size: 25px;
+}
+
+.datepicker.dropdown-menu th, .datepicker.dropdown-menu td {
+    padding: 10px 15px;
+}
+
+.datepicker.dropdown-menu {
+	color: #00CC00;
+}
+
+.datepicker table tr td.old, .datepicker table tr td.new {
+    color: #3300FF;
+}
+
+
+
+
+
+
+/* 现金业务页 */
+#current-detail,
+#maintain,
+#staple,
+#system-test,
+#system-log,
+#video-playback,
+#edit-config-time,
+#add-work-time,
+#change-config-time,
+#module-config,
+#change-info,
+#change-purse,
+#change-purse-next {
+	/*display: none;*/
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, .8);
+	padding: 20px;
+	top: 0;
+	left: 0;	
+	color: #99FF00;
+}
+
+.animated > .content {
+	height: 100%;
+	width: 100%;
+}
+
+#current-detail .title {
+	line-height: 60px;
+}
+
+.table-wrap {
+	width: 95%;
+	margin: auto;
+}
+
+.table-wrap table {
+	white-space: nowrap;
+}
+
+table td {
+	border-bottom: 1px solid #ddd;
+}
+
+#current-detail .total-info .pull-left {
+	display: flex;
+	flex-direction: row;
+}
+
+#current-detail .total-info .pull-left .item {
+	height: 60px;
+	font-size: 24px;
+	display: table;
+	margin-right: 15px;
+}
+
+#current-detail .total-info .pull-left span {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+#current-detail .total-info .pull-left .value {
+	color: #FF9900;
+	min-width: 120px;
+}
+
+#current-detail .total-info .pull-right .btn {
+	margin-left: 15px;
+	font-size: 30px;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+.btn-back,
+#current-detail .search-wrap .btn,
+#system-log .content > .top .btn,
+#system-log .btn-open,
+#video-playback .btn-open {
+	height: 60px;
+	width: 120px;
+	text-align: center;
+	line-height: 55px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	font-size: 30px;
+}
+
+.btn.active,
+#current-detail .btn:active,
+#maintain .btn:active,
+.numbers li:active,
+#staple .btn:active,
+#system-test .btn:active,
+#system-log .btn:active,
+#video-playback .btn:active,
+#module-config .btn:active,
+#add-work-time .btn:active,
+#change-config-time .btn:active,
+#change-info .btn:active,
+#change-purse .btn:active,
+#change-purse-next .btn:active {
+	background: #339900;
+}
+
+#change-purse .numbers,
+#change-purse-next .numbers {
+	padding: 20px;
+}
+
+
+/* 结账 */
+#settle-accounts {
+	text-align: center;
+	color: #0A0AF7;
+	font-size: 30px;
+}
+
+#settle-accounts .total-list {
+	margin-top: 120px;
+	display: inline-block;
+}
+
+#settle-accounts .row-item {
+	margin-top: 20px;
+}
+
+#settle-accounts .row-item .value {
+	color: #0A9B17;
+	height: 40px;
+	display: inline-block;
+	min-width: 200px;
+	line-height: 40px;
+	border-bottom: 1px solid #ddd;
+	text-shadow: 0 0 5px rgba(8, 145, 135, .4); 
+}
+
+
+#settle-accounts .btn-wrap .btn {
+	top: 0;
+	color: #fff;
+	min-width: 100px;
+	height: 100px;
+	line-height: 100px;
+	position: relative;
+	margin: 20px;
+	display: inline-block;
+	white-space: nowrap;
+	background: #CC66FF;
+	border-radius: 100%;
+	box-shadow: 0 12px 0 #9843C4, 0 12px 60px rgba(255, 255, 255, .3);
+	transition: all .15s;
+}
+
+#settle-accounts .btn-wrap .btn:active {
+	top: 6px;
+	color: #8E31BF;
+	text-shadow: 1px 1px 1px rgba(255, 255, 255, .4);
+	background: #A23ED8;
+	box-shadow: 0 6px 0 #7617A7;
+	transition: all .15s;
+}
+
+/* 功能维护 */
+#maintain button.btn,
+#current-detail button.btn {
+	border: none;
+	background: none;
+	padding: 3px 5px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	color: #99FF00;
+	font-size: 24px;
+}
+
+#maintain table .wrap {
+	display: inline-block;
+}
+
+#maintain .row-item {
+	min-height: 40px;
+	font-size: 30px;
+}
+
+#maintain .row-item input {
+	width: 80px;
+	margin: 0 10px;
+	text-align: center;
+	color: #FF9900;
+	font-size: 30px;
+	border-radius: 3px;
+}
+
+#maintain .row-item .btn {
+	background: #99FF00;
+	color: #528B03;
+	padding: 0 10px;
+	border-radius: 3px;
+	line-height: 1.5;
+}
+
+#maintain .row-item .btn:active {
+	background: #5A9803;
+	color: #345203;
+	text-shadow: 1px 1px 1px rgba(255, 255, 255, .5);
+}
+
+/* 常用品维护 */
+#staple .detail {
+	display: inline-block;
+	font-size: 24px;
+	margin-top: 100px;
+	padding: 20px;
+}
+
+#staple .detail .row-item {
+	margin-top: 15px;
+}
+
+#staple .detail .row-item > .name,
+#add-work-time .row-item > .name,
+#change-config-time .row-item .name,
+#change-info .row-item > .name {
+	min-width: 170px;
+	text-align: right;
+}
+
+#staple .detail .row-item > .value,
+#system-test .row-item > .value,
+#system-log .row-item > .value,
+#video-playback .row-item > .value,
+#add-work-time .row-item .value,
+#change-config-time .row-item .value,
+#change-info .row-item > .value,
+#change-purse .row-item > .value,
+#change-purse-next .row-item > .value {
+	color: #99FF00;
+	font-size: 24px;
+	background: none;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 0 8px;
+}
+
+#staple .btn-wrap {
+	margin-top: 50px;
+	font-size: 24px;
+}
+
+#staple .btn-wrap .numbers {
+	display: inline-block;
+	width: 400px;
+}
+
+#staple .btn-wrap .numbers li,
+#change-purse .numbers li,
+#change-purse-next .numbers li {
+	float: left;
+	width: 80px;
+	height: 80px;
+	line-height: 80px;
+	text-align: center;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	margin: 10px;
+	cursor: pointer;
+}
+
+#staple .btn-wrap .numbers li[remove],
+#change-purse .numbers li[remove],
+#change-purse-next .numbers li[remove] {
+	/*width: 180px;*/
+}
+
+#staple .btn-wrap .bottom,
+#module-config .btn-wrap,
+#add-work-time .btn-wrap,
+#change-config-time .btn-wrap,
+#change-info .btn-wrap,
+#change-purse .btn-wrap,
+#change-purse-next .btn-wrap {
+	padding: 50px 200px;
+	width: 100%;
+	display: inline-block;
+}
+
+#staple .btn-wrap .bottom .btn,
+#module-config .btn-wrap .btn,
+#add-work-time .btn-wrap .btn,
+#change-config-time .btn-wrap .btn,
+#change-info .btn-wrap .btn,
+#change-purse .btn-wrap .btn,
+#change-purse-next .btn-wrap .btn {
+	height: 80px;
+	width: 150px;
+	line-height: 80px;
+	border: 1px solid #ddd;
+	border-radius: 3px;	
+}
+
+/* 系统工具 */
+#system-test .test-list {
+	width: 100%;
+	padding: 15px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	font-size: 32px;
+}
+
+#system-test .row-item {
+	margin-top: 20px;
+	line-height: 42px;
+}
+
+#system-test .row-item > .name {
+	width: 400px;
+	text-align: right;
+	padding-right: 20px;
+}
+
+#system-test .row-item > .value {
+	padding: 5px 8px;
+}
+
+#system-test .row-item > .btns {
+	padding-left: 20px;
+}
+
+#system-test .row-item > .btns .btn {
+	padding: 0 15px;
+	border-radius: 3px;
+	border: 1px solid #ddd;
+	margin-right: 15px;
+}
+
+#system-log .top,
+#video-playback .top {
+	font-size: 25px;
+}
+
+#system-log .row-item .name,
+#video-playback .row-item .name {
+	padding-right: 10px;
+	line-height: 60px;
+}
+
+#system-log .row-item .value,
+#video-playback .row-item .value {
+	text-align: center;
+}
+
+#system-log .log-wrap .top .search {
+	display: none;
+}
+
+#system-log .log-wrap .btn-open,
+#video-playback .row-item .btn-open {
+	width: 160px;
+}
+
+#system-log .log-wrap .top .pull-left .btn {
+	border: 1px solid #ddd;
+	padding: 0 15px;
+	line-height: 60px;
+	border-radius: 3px;
+	margin-right: 5px;
+}
+
+#system-log .log-wrap .log .title {
+	text-align: center;
+}
+
+#system-log .log-wrap .log > textarea {
+	width: 100%;
+	height: 670px;
+	background: none;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	color: #99FF00;
+	padding: 10px;
+	font-size: 22px;
+}
+
+#import-number {
+	position: absolute;
+	top: 150px;
+	padding: 15px;
+	z-index: 97;
+	display: none;
+	background: rgba(51, 153, 204, .8);
+	border-radius: 5px;
+	border: 1px solid #33FF66;
+}
+
+#import-number .pawd-input {
+	width: 400px;
+	font-size: 24px;
+	line-height: 30px;
+	border-radius: 5px;
+}
+
+#import-number ul {
+	width: 400px;
+}
+
+#import-number li {
+	float: left;
+	margin: 10px;
+	height: 80px;
+	line-height: 80px;
+	width: 80px;
+	text-align: center;
+	border: 1px solid #33FF66;
+	border-radius: 3px;
+	color: #33FF66;
+	cursor: pointer;
+	font-size: 34px;
+}
+
+#import-number li:active {
+	background: #33FFFF;
+	color: #FFCC00;
+}
+
+#video-playback {
+	/*display: none;*/
+}
+
+#video-playback .vider-wrap {
+	width: 100%;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 20px;
+	text-align: center;
+}
+
+#video-playback .vider-wrap > div {
+	display: inline-block;
+	width: 500px;
+	height: 500px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	background: rgba(204, 255, 0, .4);
+}
+
+#video-playback .vider-wrap video {
+	width: 100%;
+	height: 100%;
+	background: #222;
+}
+
+#video-playback .btn-wrap {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 20px;
+}
+
+#video-playback .btn-wrap .select-date input {
+	color: #99FF00;
+}
+
+#video-playback .btn-wrap .select-date input,
+#video-playback .btn-wrap .select-speed {
+	margin-top: 5px;
+	font-size: 24px;
+}
+
+#video-playback .btn-wrap .select-speed {
+	visibility: visible;
+}
+
+#video-playback .btn-wrap .select-speed label {
+	margin-right: 35px;
+	cursor: pointer;
+}
+
+#video-playback .btn-wrap .select-speed input[type="radio"] {
+	margin-right: 8px;
+}
+
+#video-playback .btn-wrap .pull-right .btn {
+	width: 80px;
+	height: 80px;
+	line-height: 80px;
+	text-align: center;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	margin-left: 10px;
+}
+
+/* 配置 */
+#add-work-time .wrap,
+#change-config-time .wrap,
+#module-config .wrap,
+#change-info .wrap,
+#change-purse .wrap,
+#change-purse-next .wrap {
+	display: inline-block;
+	font-size: 30px;
+	/*margin-top: 150px;*/
+}
+
+#add-work-time .wrap .row-item,
+#change-config-time .wrap .row-item,
+#change-info .wrap .row-item,
+#change-purse .wrap .row-item {
+	margin-top: 40px;
+}
+#change-purse-next .wrap .row-item{
+	margin-top: 20px;
+}
+
+#add-work-time .btn-wrap,
+#change-config-time .btn-wrap,
+#module-config .btn-wrap,
+#change-info .btn-wrap,
+#change-purse .btn-wrap,
+#change-purse-next .btn-wrap {
+	font-size: 30px;
+}
+
+#change-config-time .wrap,
+#module-config .wrap {
+	display: inline-block;
+	margin: 50px auto;
+	margin-bottom: 0;
+	height: 600px;
+	overflow: auto;
+}
+
+#change-config-time .wrap {
+	margin-top: 0;
+}
+
+#add-work-time .row-item > div,
+#add-work-time .row-item > input {
+	margin-right: 10px;
+}
+
+#add-work-time .row-item .btn-add-group,
+#add-work-time .row-item .btn-delete {
+    width: 150px;
+	height: 42px;
+    border: 1px solid #ddd;
+    margin-top: 3px;
+    line-height: 40px;
+    border-radius: 3px;
+}
+
+#add-work-time .row-item .btn-add-group {
+	margin: 0;
+	height: 50px;
+	line-height: 48px;
+}
+
+#time-list {
+	height: 500px;
+	overflow: auto;
+}
+
+#change-config-time .row-item .name {
+	padding-left: 10px;
+}
+
+#change-config-time .row-item .value {
+	display: block;
+	border: none;
+}
+
+#add-work-time .row-item .value {
+	width: 150px;
+	line-height: 40px;
+}
+
+#module-config .wrap .list-item {
+	display: flex;
+	padding: 10px 0;
+	flex-direction: row;
+}
+
+#module-config .wrap .list-item > label {
+	width: 240px;
+	display: inline-block;
+	text-align: left;
+}
+
+#module-config .wrap .list-item > label > label {
+	margin-right: 10px;
+}
+
+#add-work-time .wrap .row-item select,
+#module-config .wrap .list-item select {
+	height: 35px;
+	display: inline-block;
+	font-size: 24px;
+	border-radius: 3px;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar {
+    width: 48px;
+    height: 48px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #333;
+}
