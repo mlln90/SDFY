@@ -333,6 +333,7 @@ function openSocialKeyPrinetChange(){
                                             $.extend(RechargeAndPaymentInfo, {'Resultposdosales' : currents.resultposdosales});
                                             $.extend(RechargeAndPaymentInfo, {"Trace"      : currents.resultposdosales.Trace});
                                             $.extend(RechargeAndPaymentInfo, {"TranceID"   : currents.resultposdosales.Trace});
+                                            RechargeAndPaymentInfo.PayInfo.TranNo = currents.resultposdosales.Trace;
                                             $.extend(CardInfo,RechargeAndPaymentInfo);
                                             console.log(CardInfo);
 

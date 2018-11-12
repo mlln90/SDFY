@@ -128,20 +128,41 @@ function userxSaoma(data){
 	QRScan.Close2();              // 关闭条码扫码器
 	CloseIdentityReader();        // 关闭身份证阅读器
     let newArr = [];
-    for(let i=0;i<ascArr.length;i++){
-        if(ascArr[i] == 13){
-            break;
-        }else{
-            newArr.push(parseInt(ascArr[i]) - 0x30);
+    if(ascArr[0] == 65){
+        newArr.push("A");
+        for(let i=1;i<ascArr.length;i++){
+            if(ascArr[i] == 13){
+                break;
+            }else{
+                newArr.push(parseInt(ascArr[i]) - 0x30);
+            }
         }
+    }else if(ascArr[0] == 84){
+        newArr.push("T");
+        for(let i=1;i<ascArr.length;i++){
+            if(ascArr[i] == 13){
+                break;
+            }else{
+                newArr.push(parseInt(ascArr[i]) - 0x30);
+            }
+        }
+    }else{
+        for(let i=0;i<ascArr.length;i++){
+            if(ascArr[i] == 13){
+                break;
+            }else{
+                newArr.push(parseInt(ascArr[i]) - 0x30);
+            }
+        } 
     }
-    // console.log(newArr);
-	var str='';
-	if(newArr.length == 10){
-		for(var i=0; i<newArr.length; i++){
-    		str += String( newArr[i] );
-    	}
-    	console.log(str);
+    console.log(newArr);
+    var str='';
+    for(var i=0; i<newArr.length; i++){
+        str += String( newArr[i] );
+    }
+    console.log(str);
+	
+	if( str != "" && str.length == 10){
         CardInfo = {             // 卡信息
             "ZZJCertificate": { ID: ZZJInfomation.ZZJID },
             "CardInfo":{
@@ -219,7 +240,6 @@ function userxSaoma(data){
                 }
             }else{
                 // console.log('查询用户信息失败');
-                // console.log(ret.Msg);
                 $.Writelog("查询用户信息失败,但查无数据");
                 var msg = "没有查到您的档案信息"
                 contentError(msg);
@@ -230,12 +250,8 @@ function userxSaoma(data){
             contentError();
         });
     }else{
-    	// console.log(newArr);
-        for(var i=0; i<newArr.length; i++){
-            str += String( newArr[i] );
-        }
-        console.log(str);
-        $.Writelog('扫条形码位数不正确:'+str);
+    	console.log(ascArr);
+        $.Writelog("不是顺德妇幼保健院病历号");
 		ShowMainMenu();
     }
 };
@@ -1054,6 +1070,7 @@ function payOverAndRegisterBank(){
 		}else{
 			console.log('挂号失败');
             $.Writelog('挂号失败,返回Code'+ret.Code);
+            $.Writelog(ret.Msg);
 			errorAndBackMoneyBank(ret.Msg);
 		}
     }, function(ret){
@@ -1335,14 +1352,16 @@ function errorAndBackMoneyBank(msg){
             }
             if(pageType == 'DYYW'){
                 business_type = 4;
-            }        
+            }
+            $.Writelog("冲正Trace:"+RechargeAndPaymentInfo.Trace);  
+            console.log( RechargeAndPaymentInfo.Trace );      
             $.loading(false,'加载中...');     // 冲正  退费
             MachineBGPOS.TL_CorrectTrade( JSON.stringify({'Trace':RechargeAndPaymentInfo.Trace}) ).then(function(value){
                 console.log(value);
                 var value = JSON.parse(value);
                 if(value.Code == 0){
                     $.layerClose();
-                    $.Writelog('银行卡冲正成功');
+                    $.Writelog('冲正成功');
                     var data = {
                         'PayID'           : RechargeAndPaymentInfo.PayID,
                         'TranceID'        : RechargeAndPaymentInfo.Trace,
@@ -1368,13 +1387,13 @@ function errorAndBackMoneyBank(msg){
                 }else{
                     console.log(value.msg);
                     $.layerClose();
-                    $.Writelog('银行卡冲正失败');
+                    $.Writelog('冲正失败,Code:'+value.Code);
                     CancelRegisterFailebank(value.msg);
                 }
             }, function(error){
                 $.layerClose();
                 console.log(error);
-                $.Writelog('银行卡冲正异常');
+                $.Writelog('冲正异常');
                 $.layer({
                     msg: '网络异常，请联系客服人员进行退款处理', 
                     btn: ['确认'],
@@ -1414,6 +1433,9 @@ function CancelRegisterFailebank(msg){
     }
     if(pageType == 'ZZJF'){      // 自助缴费
         BackPrevPage = judgingLoginSelf;
+    }
+    if(pageType == 'DYYW'){      // 病历本打印
+        BackPrevPage = judgingLoginPrinter;
     }
     $.HandleCondition({
         s: 30,

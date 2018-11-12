@@ -577,7 +577,7 @@ function CheckPrintDelectReceipt() {
     try {
         St = ThisWindow.DelectReceipt(); // 0 - 正常 1- 快用尽 3 -纸用完 -1 -故障
         $.Console(St, '凭条机状态返回');
-        console.log(St, '凭条机状态返回');
+        // console.log(St, '凭条机状态返回');
     } catch(er) {$.Console(er);}
     var PrintCode;
     try {

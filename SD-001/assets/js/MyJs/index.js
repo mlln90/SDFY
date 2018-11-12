@@ -8,7 +8,7 @@ var paymethods = '';                  // 判断是银行卡还是社保支付
 var timerDKQStatus;                   // 轮循查卡状态 有/无
 var readCardCOM = 'COM1';             // 台式或者壁挂 读卡器COM口
 var testcom = 1;                      // 测试时传COM口 ==> newPayMethodOfBank
-var PAYSTATUES;
+var PAYSTATUES;                       // 判断打印状态
 var intprt;                           // 指针  
 var INTERACTIONSWITCH = true;         // 人体感应切换
 var INTERACTIONSTATE = true;
@@ -17,8 +17,8 @@ var InvoicePrintStartNo;              // 发票印刷号初始值
 var isopenWXZFBPay = true;            // 是否开启微信支付宝
 var isopenSocialPay = true;           // 是否开启社保支付宝
 var isopenBankPay = true;             // 是否开启银联支付宝
+var udpRefundRegPayid;                
 
-var udpRefundRegPayid;
 $(function() {
 
     // 禁止选择文字
@@ -72,24 +72,32 @@ $(function() {
                 },QUERYSERVERINVERTAL*1000)
             }
         }
-
         // PTJPRINTNAME 
         if( ZZJInfomation.DeviceConfigTable.ID == 1){           // 台式
             ISBG = false;
             PTJPRINTNAME = 'CUSTOM K80';
+            IsOpenPTJAndAdvertisement(1);                       // 新版启动广告屏和凭条检测调用方法
         }else if( ZZJInfomation.DeviceConfigTable.ID == 2 ){    // 壁挂机
             ISBG = true;                                        // 是否为壁挂
             SFZTSD = 6;
             PTJPRINTNAME = 'T90';
             readCardCOM = 'COM2';
             testcom = 2;
+            IsOpenPTJAndAdvertisement(2);                       // 新版启动广告屏和凭条检测调用方法
         }
         console.log( PTJPRINTNAME );
         console.log( readCardCOM );
+
         OpenAcs();                                              // 打开机身电路板控制
 
-        if( ZZJCertificate.ZZJID == 3 || ZZJCertificate.ZZJID == 6 || ZZJCertificate.ZZJID == 11 ){
+        if( ZZJCertificate.ZZJID == 3 ){
             console.log('自助机编号：'+ZZJCertificate.ZZJID+' 暂不签到');
+        }else if(ZZJCertificate.ZZJID == 7){
+            MachineBGPOS.TL_LoginTrade().then(function(value){  // 银行卡，社保卡缴费签到
+                console.log(value);
+            },function(error){
+                console.log(error);
+            });
         }else{
             POS.Register().then(function(value){
                 console.log("签到返回值:",value);
@@ -104,13 +112,6 @@ $(function() {
                 console.log(error)
             })
         }
-        // else{
-        //     MachineBGPOS.TL_LoginTrade().then(function(value){  // 银行卡，社保卡缴费签到
-        //         console.log(value);
-        //     },function(error){
-        //         console.log(error);
-        //     });
-        // }
     });
 
     // 重置浏览器大小 及坐标
@@ -141,11 +142,11 @@ $(function() {
         // }, function(ret){
         //     console.log(ret)
         // });
+        // changeZZJInfomation();
     });
     // console.log($.FormatDateByString('2018080814:30:20'))
     // console.log($.Count(0.78, 0.98))
     // console.log($.Count(0.78, 0.98, 1))
-    // console.log(0.78-0.98)
     // setInterval($.CurrentDate, 1000);                  // 输出时间    
     $('.manage-login').on('dblclick', ManageLogin);       // 管理员登录
 });
@@ -199,6 +200,7 @@ function ManageLogin() {
  *   判断是否为子界面
  * @param _isTrue Boolean
  */
+ 
 function IsChildPage(_isTrue) {
     _isTrue = _isTrue === undefined ? false : _isTrue;
     if (_isTrue){
@@ -209,12 +211,10 @@ function IsChildPage(_isTrue) {
         $('.header').removeClass('headerIdentBg');
     }     
 };
+
 ThisWindow.SetTopMost(false);     // 是否置顶 
 
 // console.log(MachineBGPOS);
-// if(ZZJCertificate.ZZJID == 10){
-//     console.log( ServicesManager );
-// }
 // console.log(ReadCardDev);
 
 /*
@@ -243,23 +243,8 @@ function ShowMainMenu() {
     $.Writelog('---------------------------主页分割线----------------------------');
     $.Writelog('-----------------------------------------------------------------');
     $.ExecuteAnimate(ele);
-
-    // if( ZZJCertificate.ZZJID == 6 || ZZJCertificate.ZZJID == 11 || ZZJCertificate.ZZJID == 3 ){
-    //     $.Console("自助机6,11");
-    //     NotPutInCard = true;
-    // }else{
-        // if( ZZJInfomation.ZZJID == 4 || ZZJInfomation.ZZJID == 24 || ZZJInfomation.ZZJID == 21){
-        //     MachineBGPOS.TL_EjectCard();    
-        // }else{
-            // MachineBGPOS.CloseDKQ(readCardCOM).then(function(value){    // 关闭读卡器
-            //     console.log(value);
-            // }, function(error){
-            //     console.log(error);
-            // });  
-        // }
-    // }
-    
-    if( ZZJCertificate.ZZJID == 3 || ZZJInfomation.ZZJID == 6 || ZZJInfomation.ZZJID == 11){
+  
+    if( ZZJCertificate.ZZJID == 3 ){
         isopenSocialPay = false;               // 是否开启社保支付宝
         isopenBankPay = false;                 // 是否开启银联支付宝
     }
@@ -338,10 +323,18 @@ function ShowMainMenu() {
         }
     });
     if (!CardInfo.CardNum) {
-        $(ele + ' .btn-exit').hide();         // 无卡删除退卡按钮
+        $(ele + ' .btn-exit').hide();                  // 无卡删除退卡按钮
+    }
+    if(ZZJCertificate.ZZJID == 36 || ZZJCertificate.ZZJID == 37 ||  ZZJCertificate.ZZJID == 38 ){
+        $(ele + ' .btn-consultations').show();         // 流水号取号显示
     }
     // 退卡
     // $.ExitCard(ele);
+    $(ele + ' .btn-consultations').on("click",function(){
+        console.log("流水号取号");
+        // console.log(SerialNumber);
+        SerialNumber.StartQH();
+    })
 };
 
 // 生成 二维码
@@ -357,6 +350,7 @@ function createCodeEWM(ele,_str){
         foreground : "#000000",        //二维码的前景色
      }); 
 }
+
 // 二维码中文乱码问题
 function utf16to8(str) {  
     var out, i, len, c;  
@@ -445,21 +439,22 @@ function showzzjinfo(){
 function changeZZJInfomation(){
     console.log(ZZJCertificate);
     console.log(ZZJInfomation);
-    if(ZZJInfomation.ZZJState == 1){
-        ZZJInfomation.ZZJState = 0;
-    }else{
-        ZZJInfomation.ZZJState = 1; 
-    }
+    // if(ZZJInfomation.ZZJState == 1){
+    //     ZZJInfomation.ZZJState = 0;
+    // }else{
+    //     ZZJInfomation.ZZJState = 1; 
+    // }
     var param = {
             'ZZJCertificate'   : ZZJCertificate,
             'AdminCertificate' : {},
             'ZZJInfomation'    : ZZJInfomation
         };
-    AJAX.Admin.ChangeZZJInfomation(JSON.stringify(param),function(ret){
-        console.log(ret)
-    },function(ret){
-        console.log(ret)
-    })
+    console.log(param);
+    // AJAX.Admin.ChangeZZJInfomation(JSON.stringify(param),function(ret){
+    //     console.log(ret)
+    // },function(ret){
+    //     console.log(ret)
+    // })
 }
 
 // 删除自助机信息
@@ -497,7 +492,7 @@ function OpenAcs() {
                 console.log('电路板打开成功');
                 $.Writelog('电路板打开成功');
                 if(INTERACTIONSWITCH){
-                    AcsSwitch.SetCallback("BodyInductionBack");
+                    AcsSwitch.SetCallback("BodyInductionBack");   // 人体感应调用
                 }    
             }else{
                 $.Speak('打开电路板控制失败');
@@ -530,7 +525,6 @@ function Record_UDP_CloseDKQfirst(msg){
 //     {date:"2012-09-07",val:12},
 //     {date:"2018-04-09",val:122}
 // ];
-
 // 按时间将数组分类
 function transframArray(_data){
     var newArr = _data;
@@ -540,3 +534,19 @@ function transframArray(_data){
     return newArr.reverse();
 }
 
+function IsOpenPTJAndAdvertisement(_type){
+        if(_type == 1){
+            console.log("台式机调用");
+            console.log("传参type:"+_type);
+            StartPlug_in.StartPlug(_type);
+        }
+        if(_type == 2){
+            console.log("壁挂机调用");
+            console.log("传参type:"+_type);
+            StartPlug_in.StartPlug(_type).then(function(value){
+                console.log(value);
+            }, function(error){
+                console.log(error);
+            });
+        }
+}

@@ -17,6 +17,7 @@ var HomeMenuText = '<div id="main-menu">'
 		+ '</div>'
 		+ '<div class="operate clearfix">'
 		+ '<div class="btn pull-right btn-exit"><span>退出</span>&nbsp;CARD</div>'
+		+ '<div class="btn pull-right btn-consultations"><span>治疗取号</span></div>'
 		+ '</div>'
 		+ '<p class="company padding-50">深圳市汇利斯通信息技术有限公司制作</p>'
 		+ '</div>';
@@ -158,7 +159,7 @@ var SelfHelpPaymentText = `<div id="selfHelpPayment">
 var reservationNumberText = `<div id="reservationNumber">
 			<div class="content">
 				<div class="animated bounceIn">
-					<div class="title printTitle">预约取号</div>
+					<div class="title printTitle">取号报到</div>
 					<ul class="user-info col-6 font-24 clearfix">
 						<li class="p-l-l p-r-l "></li>
 						<li class="p-l-l p-r-l "></li>

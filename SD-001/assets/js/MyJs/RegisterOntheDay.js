@@ -1080,15 +1080,15 @@ function bankCardPayOnTheDay(){
 	        		setTimeout(function(){
 	        			$.Writelog('>>>>>>>>>>>>倒计时结束<<<<<<<<<<<');
 	    				BackPrevPage();  
-	        		},1500)
-	        	},500);
+	        		},1000)
+	        	},1500);
 	        }else{
 	        	POS.Stop();                             // 中断银联操作
 	    		// POS.OutCard("CRT310",testcom);       // 弹卡
 	    		setTimeout(function(){
 	    			$.Writelog('>>>>>>>>>>>>倒计时结束<<<<<<<<<<<');
 	    			BackPrevPage();
-	    		},3000);
+	    		},2500);
 	        }
 	    },
 	    homeBack: function($ele) {
@@ -1102,15 +1102,15 @@ function bankCardPayOnTheDay(){
 	        		setTimeout(function(){
 	        			$.Writelog('>>>>>>>>>>>>返回首页<<<<<<<<<<<');
 	    				ShowMainMenu();  
-	        		},1500)
-	        	},500);
+	        		},1000)
+	        	},1500);
 	        }else{
 		    	POS.Stop();                             // 中断银联操作
 	    		// POS.OutCard("CRT310",testcom);       // 弹卡
 	    		setTimeout(function(){
 	    			$.Writelog('>>>>>>>>>>>>返回首页<<<<<<<<<<<');
 	    			ShowMainMenu();
-	    		},3000); 
+	    		},2500); 
     		}            
 	    },
 	    prevBack: function($ele) {
@@ -1124,15 +1124,15 @@ function bankCardPayOnTheDay(){
 	        		setTimeout(function(){
 	        			$.Writelog('>>>>>>>>>>>>返回上一页<<<<<<<<<<<');
 	    				BackPrevPage();  
-	        		},1500)
-	        	},500);
+	        		},1000)
+	        	},1500);
 	        }else{
 	        	POS.Stop();                             // 中断银联操作
 	    		// POS.OutCard("CRT310",testcom);       // 弹卡
 		        setTimeout(function(){
 		        	$.Writelog('>>>>>>>>>>>>返回上一页<<<<<<<<<<<');
 	    			BackPrevPage();
-	    		},3000);   
+	    		},2500);   
 	        }     
 	    },
 	    exitBack: function($ele) {
@@ -1148,8 +1148,8 @@ function bankCardPayOnTheDay(){
 						$.ExitCardClearInfo();
 						$.intoOrExitCard(0, 5); 
 						// $.ExitCard();  //退卡     
-	        		},1500)
-	        	},500);
+	        		},1000)
+	        	},1500);
 	        }else{
 	        	POS.Stop();                             // 中断银联操作
 	    		// POS.OutCard("CRT310",testcom);       // 弹卡	 
@@ -1158,7 +1158,7 @@ function bankCardPayOnTheDay(){
 					$.ExitCardClearInfo();
 					$.intoOrExitCard(0, 5); 
 					// $.ExitCard();  //退卡   
-				},3000);     
+				},2500);     
 	        }          
 	    },
 	    callBack: function($ele) {
@@ -1200,8 +1200,8 @@ function socialSecurityCardPayOnTheDay(){
         		console.log("写入后", FileSystem.ReadAllText('D:/ZZJ/Debug/softpos/whilebreak') );   
         		setTimeout(function(){
         			BackPrevPage();    
-        		},1500)
-        	},500);
+        		},1000)
+        	},1500);
 		    
 	    },
 	    homeBack: function($ele) {
@@ -1215,8 +1215,8 @@ function socialSecurityCardPayOnTheDay(){
         		console.log("写入后", FileSystem.ReadAllText('D:/ZZJ/Debug/softpos/whilebreak') );   
         		setTimeout(function(){
         			ShowMainMenu();    
-        		},1500);
-        	},500);               
+        		},1000);
+        	},1500);               
 	    },
 	    prevBack: function($ele) {
 	        console.log('上一页');
@@ -1229,8 +1229,8 @@ function socialSecurityCardPayOnTheDay(){
         		console.log("写入后", FileSystem.ReadAllText('D:/ZZJ/Debug/softpos/whilebreak') );   
         		setTimeout(function(){
         			BackPrevPage();    
-        		},1500);
-        	},500); 
+        		},1000);
+        	},1500); 
 	    },
 	    exitBack: function($ele) {
 	        console.log($ele);
@@ -1245,8 +1245,8 @@ function socialSecurityCardPayOnTheDay(){
         			$.ExitCardClearInfo();
 					$.intoOrExitCard(1, 5);              // 退卡提示   
 					// $.ExitCard();                     // 退卡 
-        		},1500);  
-        	},500); 
+        		},1000);  
+        	},1500); 
 	    },
 	    callBack: function($ele) {
 	        console.log($ele);
@@ -1317,8 +1317,7 @@ function showProjectListOnTheDay(){
 		        	$.layerClose();
 		        	console.log(ret);
 		        	var results = ret;
-		        	$.Writelog('Trace'+results.Trace);
-		        	$.Writelog('PayId'+results.PayID);
+		        	$.Writelog(results.Msg);
 	        		if(results.Code == 0){
 	        			// 判断是微信支付宝 还是 银行卡社保退费
 	        			// if(result.Doct.ExParams.Zffs != "2" && result.Doct.ExParams.Zffs != "1" ){
@@ -1380,23 +1379,19 @@ function showProjectListOnTheDay(){
 		        });    
 			}else{
 				$.layerClose();
-				// if(ZZJInfomation.ZZJID == 36 || ZZJInfomation.ZZJID == 22){
-				// 	RetreatNumberOfBank();
-				// }else{
-					$.layer({
-						msg: '检测到您是银行卡或者社保退号，请到人工窗口谢谢合作',        
-					    btn: ['确定'],                    
-					    type: 1,                           
-					    time: 10,                          
-					    bulb: false,                       
-					    title: '确认',                     
-					    bulbSrc: 'assets/images/tip/bulb.png',     
-					    endExecute: true,                          
-					    yes: function() {                       
-					        judgingLogin();
-					    }
-					})
-				// }
+				$.layer({
+					msg: '检测到您是银行卡或者社保退号，请到人工窗口谢谢合作',        
+				    btn: ['确定'],                    
+				    type: 1,                           
+				    time: 10,                          
+				    bulb: false,                       
+				    title: '确认',                     
+				    bulbSrc: 'assets/images/tip/bulb.png',     
+				    endExecute: true,                          
+				    yes: function() {                       
+				        judgingLogin();
+				    }
+				})
 			}
 	    },
 	    homeBack: function($ele) {

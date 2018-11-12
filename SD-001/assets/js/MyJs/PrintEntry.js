@@ -487,7 +487,7 @@ function UnionPtint() {
 	}		
 }
 
-/**-----------------------------------------------------------------------**/
+/**------------------------------------------------------------------------------------------------------------------**/
 
 // 生成并打印条码--注册
 function CreateBarCodeAndPrint(card) {
@@ -585,10 +585,10 @@ function rechargeSucceed(card) {
     // $('#barcode1').JsBarcode(str, options); //jQuery
     var randomNumber = Math.random().toString().substr(2,9);      // 随机数
     var base64 = $(barcode).attr('src');
-    console.log(base64)
+    // console.log(base64);
     base64 = base64.split(';')[1];
     base64 = base64.split(',')[1];
-	console.log(base64);
+	// console.log(base64);
 	FileSystem.WriteImageFileFromBase64('D:/barcodes/base'+randomNumber+'.png', base64);
 
 	var age = countAges(CardInfo);
@@ -671,7 +671,7 @@ function rechargeSucceedOnline(card) {
     // console.log(base64);
     base64 = base64.split(';')[1];
     base64 = base64.split(',')[1];
-	console.log(base64);
+	// console.log(base64);
 	FileSystem.WriteImageFileFromBase64('D:/barcodes/base'+randomNumber+'.png', base64);
 
 	var age =countAges(CardInfo);
@@ -750,10 +750,10 @@ function rechargeSucceedPrint(card) {
     // $('#barcode1').JsBarcode(str, options); //jQuery
     var randomNumber = Math.random().toString().substr(2,10);      // 随机数
     var base64 = $(barcode).attr('src');
-    console.log(base64)
+    // console.log(base64);
     base64 = base64.split(';')[1];
     base64 = base64.split(',')[1];
-	console.log(base64);
+	// console.log(base64);
 	FileSystem.WriteImageFileFromBase64('D:/barcodes/base'+randomNumber+'.png', base64);
 
 	var age = countAges(CardInfo);
@@ -865,7 +865,7 @@ function blbpingtiao(card){
     // console.log(base64);
     base64 = base64.split(';')[1];
     base64 = base64.split(',')[1];
-	console.log(base64);
+	// console.log(base64);
 	FileSystem.WriteImageFileFromBase64('D:/barcodes/base'+randomNumber+'.png', base64);
 
     console.log("调用打印...");

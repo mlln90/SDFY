@@ -25,6 +25,8 @@ var AJAX_URL = {
 
 	'QueryWorkTimeSegmentConfigTable'   : '/Admin/QueryWorkTimeSegmentConfigTable',
 
+	'QueryWorkTimeSegmentConfigTableList': '/Admin/QueryWorkTimeSegmentConfigTableList',
+
 	'ChangeModuleConfig'                : '/Admin/ChangeModuleConfig',
 
 	'ChangeModuleConfigTable'           : '/Admin/ChangeModuleConfigTable',
@@ -385,9 +387,14 @@ var AJAX = (function() {
 		ajax(_param, _callback, _callback2, _errorback, 'post', 'ChangeZZJInfomation', null, null);
 	}
 
-	/* 获取自助机时间配置 */
+	/* 获取单台自助机时间配置 */
 	Admin.QueryWorkTimeSegmentConfigTable = function(_param, _callback, _callback2, _errorback) {
 		ajax(_param, _callback, _callback2, _errorback, 'post', 'QueryWorkTimeSegmentConfigTable', null, null);
+	}
+
+	/* 获取所有自助机时间配置 */
+	Admin.QueryWorkTimeSegmentConfigTableList = function(_param, _callback, _callback2, _errorback) {
+		ajax(_param, _callback, _callback2, _errorback, 'post', 'QueryWorkTimeSegmentConfigTableList', null, null);
 	}
 
 	/* 自助机配置单个模块 */

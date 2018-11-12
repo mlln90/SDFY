@@ -216,7 +216,7 @@ var layerTimer;
 				$(top).appendTo(animated);
 
 				var wrap = $('<div>').css({
-					padding: '25px 45px 5px',
+					padding: '25px 45px 10px',
 					backgroundColor: '#FFFFFF',
 				});
 				var msg = $('<div>').addClass('msg').css(messageStyle).css({

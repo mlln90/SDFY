@@ -438,6 +438,7 @@ function PosPaying_Callback(json){
 async function PosRefund(){              
 	var payinfo = newPayMthodOfBankPayInfo;
 	console.log(newPayMthodOfBankPayInfo);
+    $.Writelog("new银行卡冲正："+JSON.parse(newPayMthodOfBankPayInfo).RefundPack);
 	POS.Refund("PosRefund_Callback", payinfo);
 }
 
@@ -489,6 +490,7 @@ function PosRefund_Callback(json){
 	}else{
 		console.log("冲正通讯失败");
 		$.Writelog("支付交易通讯失败"+value.Msg);
+        CancelRegisterFailebank(value.Msg);
 	}
 }
 
@@ -1043,6 +1045,9 @@ var bankData = [
 		"Code" : "55",
 		"Msg"  : "输入密码错误，请重试"
 	}, {
+        "Code" : "57",
+        "Msg"  : "不允许持卡人进行的交易，交易失败，请联系发卡行"
+    }, {
 		"Code" : "62",
 		"Msg"  : "受限制的卡，交易失败请联系发卡行"
 	}, {

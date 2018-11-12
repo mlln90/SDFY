@@ -30,12 +30,12 @@ function HospitalIntroduce() {
 
     // 参保查询  ==> 社保平台接口
     $('.socialinto.item').click(function(){
-        if(ZZJInfomation.ZZJID == 22 ){
+        // if(ZZJInfomation.ZZJID == 22 ){
             // url = 'http://139.0.1.99:9393/ebf/dev/devHomepage/devHomepage.jsp?pageType=MENU3&amp';
             userSocialInfoQuery();
-        }else{
-            unsupportedClick();
-        }
+        // }else{
+        //     unsupportedClick();
+        // }
     })
 
     /* 退卡并返回主界面 - 循环查卡 */

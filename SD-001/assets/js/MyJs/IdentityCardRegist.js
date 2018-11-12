@@ -17,11 +17,7 @@ function IdentityCardRegist(){
 
  	$('.identityCardRegistSocial.item').click(function(){             // 社保卡注册
  		registerMethod = "socialcard";
- 		if( ZZJInfomation.ZZJID != 36 ){
- 			unsupportedClick();
- 		}else{
- 			socialCardRegister();
- 		}
+		socialCardRegister();
  	});	
 
  	$('.identityCardRegistNoCard.item').click(function(){             // 无证注册

@@ -14,6 +14,8 @@ $(function() {
 const AJAX = top.AJAX;
 const CampusVal = top.CampusVal;
 var ZZJINFO = top.ZZJINFO;
+console.log(top);
+// console.log(CampusVal);
 
 /*
  * 功能绑定事件
@@ -66,7 +68,7 @@ function PopControl(_type) {
 }
 
 /*
- * 修改工作时间
+ * 修改工作时间  
  */
 function ShowDataBindEvent1() {
 
@@ -80,22 +82,36 @@ function ShowDataBindEvent1() {
 	}
 	var TimeList = [];
 	var $select = $(ele + ' .wrap .row-item.time-list select');
-	AJAX.Admin.QueryWorkTimeSegmentConfigList(param, function(ret) {
-		// console.log(ret);
-		TimeList = ret.WorkTimeSegmentTables;
-		$select.empty();
-		$select.append('<option value="-1">请选择需要修改的时间表</option>')
-		$.each(TimeList, function(n, val) {
-			if (val.DistrictID != CampusVal
-				&& val.DistrictID != -1)
-				return true;
-			var time = val.TableName;
-			/*$.each(val.WorkTimeSegments, function(_n, _val) {
-				time += _val.StartTime.split('T')[1] + '-' + _val.EndTime.split('T')[1] + '  ';
-			});*/
-			var option = '<option value="' + n + '">' + time + '</option>';
-			$select.append(option);
-		});
+
+	// AJAX.Admin.QueryWorkTimeSegmentConfigList( JSON.stringify(param), function(ret){
+	AJAX.Admin.QueryWorkTimeSegmentConfigTableList( JSON.stringify(param), function(ret){	
+		console.log(ret);
+	}, function(ret) {
+		console.log(ret);
+		if(ret.Code == 0){
+			// TimeList = ret.WorkTimeSegmentTables;
+			TimeList = ret.UseTimeSegmentConfig;
+			$select.empty();
+			$select.append('<option value="-1">请选择需要修改的时间表</option>');
+			$.each(TimeList, function(n, val) {
+				// if (val.ID != CampusVal && val.ID != -1){ return true; }
+				// var time = val.TableName;
+				/*$.each(val.WorkTimeSegments, function(_n, _val) {
+					time += _val.StartTime.split('T')[1] + '-' + _val.EndTime.split('T')[1] + '  ';
+				});*/
+				// var option = '<option value="' + n + '">' + time + '</option>';
+				// $select.append(option);
+				if ( val.ID != -1 ){
+					var time = val.Name;
+					var option = '<option value="' + n + '">' + time + '</option>';
+					$select.append(option);
+				}else{
+					console.log(val.Name)
+				}
+			});
+		}else{
+			console.log(ret.Msg);
+		}
 	}, function(ret) {
 		console.log(ret);
 	});
@@ -104,7 +120,8 @@ function ShowDataBindEvent1() {
 	$select.on('change', function() {
 		var id = $(this).val();
 		CurrentData = TimeList[id];
-		$(ele + ' .wrap .row-item .value.time-name').val(CurrentData.TableName);
+		// $(ele + ' .wrap .row-item .value.time-name').val(CurrentData.TableName);
+		$(ele + ' .wrap .row-item .value.time-name').val(CurrentData.Name);
 		var TimeArr = CurrentData.WorkTimeSegments;
 		var $list = $('#time-list');
 		$list.empty();
@@ -113,13 +130,15 @@ function ShowDataBindEvent1() {
 			$list.append(list);
 			var $Group = $list.find('.row-item:eq(' + n + ')');
 			$Group.find('.time-status select').val(Number(val.Enabled));
-			$Group.find('.time-start input').val(val.StartTime.split('T')[1]);
-			$Group.find('.time-end input').val(val.EndTime.split('T')[1]);
+			// $Group.find('.time-start input').val(val.StartTime.split('T')[1]);
+			// $Group.find('.time-end input').val(val.EndTime.split('T')[1]);
+			$Group.find('.time-start input').val(val.StartTime);
+			$Group.find('.time-end input').val(val.EndTime);
 		});
 		DeleteTimeGroup();
 	});
 	AddTimeGroup();
-	DeleteTimeGroup();
+	DeleteTimeGroup();            // 删除时间组
 
 	// 确认
 	$(ele + ' .btn-affirm').on('click', function() {
@@ -131,14 +150,25 @@ function ShowDataBindEvent1() {
 				btn: ['确认']
 			});
 		}
-		param.WorkTimeSegmentTable.ID = CurrentData.ID;
-		AJAX.Admin.ChangeWorkTimeSegmentConfigTable(param, function(ret) {
+		param.UseTimeSegmentConfig.ID = CurrentData.ID;
+		console.log(param);
+		AJAX.Admin.ChangeWorkTimeSegmentConfigTable( JSON.stringify(param), function(ret){
+			console.log(ret);
+		}, function(ret) {
 			// console.log(ret);
-			$.layerPop({
-				msg: '修改成功！',
-				time: 6,
-				btn: ['确认']
-			});
+			if(ret.Code == 0){
+				$.layerPop({
+					msg: '修改成功！',
+					time: 6,
+					btn: ['确认']
+				});
+			}else{
+				$.layerPop({
+					msg: ret.Msg,
+					time: 6,
+					btn: ['确认']
+				});
+			}
 		}, function(ret) {
 			console.log(ret);
 			$.layerPop({
@@ -147,7 +177,6 @@ function ShowDataBindEvent1() {
 				btn: ['确认']
 			});
 		});  // 修改
-			
 	});
 
 	// 返回
@@ -219,10 +248,12 @@ function GetWorkTimeParam() {
 		TimeList.push(obj);
 	});
 	return {
-		WorkTimeSegmentTable: {
-			TableName: GroupNmae,
-			WorkTimeSegments: TimeList,
-			DistrictID: CampusVal,
+		UseTimeSegmentConfig: {
+			"TableName": GroupNmae,
+			"Name"     : GroupNmae,
+			"WorkTimeSegments": TimeList,
+			"DistrictID": CampusVal,
+			"ID"        : ""
 		}
 	};
 }
@@ -339,6 +370,7 @@ function ShowDataBindEvent3() {
  * 修改配置信息 输出数据，绑定事件
  */
 function ShowDataBindEvent4() {
+	console.log(ZZJINFO);
 	var data = ZZJINFO.ZZJInfomation;
 	var ele = '#change-info';
 
@@ -356,8 +388,19 @@ function ShowDataBindEvent4() {
 		ZZJINFO.ZZJInfomation.Mobile = phone;
 		ZZJINFO.ZZJInfomation.Name = ZZJnum;
 		ZZJINFO.ZZJInfomation.Position = location;
-		AJAX.Admin.ChangeZZJInfomation(ZZJINFO, function(ret) {
-			// console.log(ret);
+
+		var param = {
+            'ZZJCertificate'   : {
+            	"MAC"     : ZZJINFO.ZZJInfomation.MACs,
+            	"Password": "1",
+            	"ZZJID"   : ZZJINFO.ZZJInfomation.ZZJID
+            },
+            'AdminCertificate' : {},
+            'ZZJInfomation'    : ZZJINFO.ZZJInfomation
+        };
+
+		AJAX.Admin.ChangeZZJInfomation( JSON.stringify(param), function(ret) {
+			console.log(ret);
 			$.layerPop({
 				msg: '修改成功！',
 				time: 6,
@@ -406,7 +449,6 @@ function GetOneGroupText() {
 				+ '</div>'
 				+ '</div>';
 }
-
 
 
 /* 修改配置信息 */
